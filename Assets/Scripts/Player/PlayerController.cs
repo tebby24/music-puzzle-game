@@ -15,10 +15,6 @@ public class PlayerController : MonoBehaviour
 
     public Rigidbody2D playerRigidBody;
 
-    string[] inputs = { "right", "left", "up", "down" };
-    int[] horizontal = { 1, -1, 0, 0 };
-    int[] vertical = { 0, 0, 1, -1 };
-
     // Start is called before the first frame update
     void Start()
     {
@@ -29,19 +25,21 @@ public class PlayerController : MonoBehaviour
     //moves the player
     //takes a key code
     //takes 1 or -1
-    public void movePlayer(int x, int y)
+    public void movePlayer(string k, int x, int y)
     {
-    
-        if (!Physics2D.OverlapCircle(playerMovePoint.position + new Vector3(x, y, 0f), .2f, whatStopsMovement))
+        //checks for positive horizontile input
+        if (Input.GetKeyDown(k))
         {
-
+            //checks for any objects to the right or left of colider
+            if (!Physics2D.OverlapCircle(playerMovePoint.position + new Vector3(x, y, 0f), .2f, whatStopsMovement))
             {
-            //moves the player by x units
-            playerMovePoint.position += new Vector3(x, y, 0f);
-                
+
+                {
+                //moves the player by x units
+                playerMovePoint.position += new Vector3(x, y, 0f);
+                }
             }
         }
-        
     }
 
 
@@ -55,17 +53,12 @@ public class PlayerController : MonoBehaviour
 
 
         //checks if player and move point are very close together
-        if (Vector3.Distance(transform.position, playerMovePoint.position) <= .06f)
+        if (Vector3.Distance(transform.position, playerMovePoint.position) <= .2f)
         {
-
-            for (int i = 0; i < 4; i++)
-            {
-                if (Input.GetKeyDown(inputs[i]))
-                {
-                    movePlayer(horizontal[i], vertical[i]);
-                    break;
-                }
-            }
+            movePlayer("right", 1, 0);
+            movePlayer("left", -1, 0);
+            movePlayer("up", 0, 1);
+            movePlayer("down", 0, -1);
 
         }        
     }
