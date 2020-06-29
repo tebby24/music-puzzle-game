@@ -55,9 +55,8 @@ public class PlayerController : MonoBehaviour
 
 
         //checks if player and move point are very close together
-        if (Vector3.Distance(transform.position, playerMovePoint.position) <= .06f)
+        if (Vector3.Distance(transform.position, playerMovePoint.position) <= .055f)
         {
-
             for (int i = 0; i < 4; i++)
             {
                 if (Input.GetKeyDown(inputs[i]))
@@ -66,7 +65,6 @@ public class PlayerController : MonoBehaviour
                     break;
                 }
             }
-
         }        
     }
 }
