@@ -34,7 +34,14 @@ public class BoxMover : MonoBehaviour
         {
             return true;
         }
-        return false;
+        else if(Physics2D.OverlapCircle(transform.position + new Vector3(x, y, 0), 0.3f, GameObject.FindWithTag("Box")))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     //checks for a player in line with box
@@ -79,7 +86,7 @@ public class BoxMover : MonoBehaviour
                     BlockMovePoint.position += new Vector3(x, y, 0f);
                 }
             }
-        }
+        } 
 
 
     }
