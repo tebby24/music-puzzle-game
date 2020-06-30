@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 //handles movement of all boxes
@@ -10,37 +11,52 @@ public class BoxMover : MonoBehaviour
     public LayerMask whatStopsMovement;
     public LayerMask player;
     public LayerMask canPush;
+    public LayerMask box;
 
     public Transform playerTransform;
     public Transform BlockMovePoint;
 
     public float moveSpeed;
+    bool isMovable = true;
 
+    GameObject[] gameObjs;
     Rigidbody2D boxRigidbody;
-
+    Vector3 currentPos;
 
     // Start is called before the first frame update
     void Start()
     {
         BlockMovePoint.parent = null;
         boxRigidbody = GetComponent<Rigidbody2D>();
+
+        Scene scene = SceneManager.GetActiveScene();
+        GameObject[] gameObjs = scene.GetRootGameObjects();
     }
 
     //checks for wall infront of box and player in line with box
     public bool checkForWall(int x, int y)
     {
-        if (Physics2D.OverlapCircle(transform.position + new Vector3(x, y, 0), 0.3f, whatStopsMovement)
-            && Physics2D.OverlapBox(transform.position - new Vector3(x * 10, y * 10, 0), new Vector2(Mathf.Abs((x * 20)) + .5f, Mathf.Abs((y * 20)) + .5f), 0f, player))
+        currentPos = transform.position;
+
+        while (true)
         {
-            return true;
-        }
-        else if(Physics2D.OverlapCircle(transform.position + new Vector3(x, y, 0), 0.3f, GameObject.FindWithTag("Box")))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
+            currentPos += new Vector3(x, y, 0);
+
+            if (Physics2D.OverlapCircle(currentPos, 0.3f, whatStopsMovement)
+                && Physics2D.OverlapBox(currentPos - new Vector3(x, y, 0), new Vector2(Mathf.Abs(x) + .5f, Mathf.Abs(y) + .5f), 0f, player))
+            {
+                return true;
+                break;
+            }
+            else if (Physics2D.OverlapCircle(currentPos, 0.3f, box))
+            {
+                continue;
+            }
+            else
+            {
+                return false;
+                break;
+            }
         }
     }
 
@@ -160,5 +176,3 @@ public class BoxMover : MonoBehaviour
         }
     }
 }
-
-// : ^)
